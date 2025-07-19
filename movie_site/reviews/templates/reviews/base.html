@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cinephile – Movie Reviews</title>
+    <link rel="stylesheet" href="{% static 'reviews/css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <header>
+    <div class="header-container">
+        <div class="logo-section">
+            <img src="{% static 'reviews/images/logo.jpg' %}" alt="Logo" class="site-logo">
+            <div class="logo-text">
+                <h1>Mr_Cinephile 🎬</h1>
+                <p>Your daily dose of movies and reviews</p>
+                <p class="reviewer-name"><strong>Reviewer:</strong> Cinephile Team</p>
+            </div>
+        </div>
+
+
+        <ul class="social-links header-links">
+            <li><a href="https://www.instagram.com/mr___cinephile?igsh=MW8zNWx2cjYwdzdkOQ==" target="_blank">Instagram</a></li>
+            <li><a href="https://www.youtube.com/@Mr__Cinephile_Content" target="_blank">YouTube</a></li>
+            <li><a href="mailto:the.mr.cinephile@gmail.com">Email</a></li>
+        </ul>
+    </div>
+</header>
+
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Made by Own. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'reviews/js/script.js' %}"></script>
+</body>
+</html>

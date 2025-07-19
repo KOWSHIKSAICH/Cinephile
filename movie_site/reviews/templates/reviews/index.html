@@ -1,0 +1,123 @@
+{% extends 'reviews/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'reviews/css/style.css' %}">
+
+<main class="movie-section">
+    {% for movie in movies %}
+    <div class="movie-card">
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+        <h2>{{ movie.title }}</h2>
+        <button class="review-btn" 
+                data-title="{{ movie.title }}"
+                data-cast="{{ movie.cast }}"
+                data-director="{{ movie.director }}"
+                data-music="{{ movie.music_director }}"
+                data-review="{{ movie.review }}"
+                data-poster="{{ movie.poster.url }}"
+                data-rating="{{ movie.rating }}">
+            View Review
+        </button>
+    </div>
+    {% endfor %}
+</main>
+
+<!-- Popup Modal -->
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <div class="popup-container">
+            <div class="poster">
+                <img id="modalPoster" src="" alt="Movie Poster">
+            </div>
+            <div class="info">
+                <div class="movie-box">
+                    <h2 id="modalTitle"></h2>
+
+                    <!-- ⭐️ Cinephile Rating and Star Rating -->
+                    <div class="cinephile-rating">
+                        <strong>Cinephile Rating:</strong> <strong id="modalRatingText"></strong> /5.00
+                    </div>
+                    <div class="star-rating" id="modalStars"></div>
+
+                    <p><strong>Cast:</strong> <span id="modalCast"></span></p>
+                    <p><strong>Director:</strong> <span id="modalDirector"></span></p>
+                    <p><strong>Music Director:</strong> <span id="modalMusic"></span></p>
+                </div>
+                <div class="review">
+                    <h3>Review</h3>
+                    <p id="modalReview"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.review-btn');
+    const modal = document.getElementById('reviewModal');
+    const closeBtn = document.querySelector('.close-btn');
+
+    const title = document.getElementById('modalTitle');
+    const cast = document.getElementById('modalCast');
+    const director = document.getElementById('modalDirector');
+    const music = document.getElementById('modalMusic');
+    const review = document.getElementById('modalReview');
+    const poster = document.getElementById('modalPoster');
+    const starsContainer = document.getElementById('modalStars');
+    const ratingText = document.getElementById('modalRatingText');
+
+    // Function to render star rating
+    function renderStars(rating) {
+        starsContainer.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.classList.add('star');
+
+            if (rating >= i) {
+                star.classList.add('filled');
+                star.textContent = '★';
+            } else if (rating > i - 1 && rating < i) {
+                const partialWidth = ((rating - (i - 1)) * 100).toFixed(0) + '%';
+                star.classList.add('partial');
+                star.style.setProperty('--width', partialWidth);
+                star.textContent = '☆'; // fallback
+            } else {
+                star.textContent = '☆';
+            }
+
+            starsContainer.appendChild(star);
+        }
+    }
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            title.textContent = btn.dataset.title;
+            cast.textContent = btn.dataset.cast;
+            director.textContent = btn.dataset.director;
+            music.textContent = btn.dataset.music;
+            review.textContent = btn.dataset.review;
+            poster.src = btn.dataset.poster;
+
+            const ratingValue = parseFloat(btn.dataset.rating);
+            renderStars(ratingValue);
+            ratingText.textContent = ratingValue.toFixed(2);
+
+            modal.style.display = 'block';
+        });
+    });
+
+    closeBtn.onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    window.onclick = e => {
+        if (e.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+});
+</script>
+{% endblock %}
